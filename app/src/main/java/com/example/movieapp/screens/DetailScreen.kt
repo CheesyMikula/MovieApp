@@ -21,14 +21,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 
 @Composable
-fun DetailScreen(navController: NavController, movieID: String?){
+fun DetailScreen(navController: NavController, movieID: String?, viewModel: FavoritesViewModel){
 
     val movie = getMovies().first { it.id == movieID }
-    MainContentDetail(movie = movie, navController = navController){
+    MainContentDetail(movie = movie, navController = navController, viewModel = viewModel){
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             MovieRow(movie = movie)
 
@@ -52,7 +53,7 @@ fun DetailScreen(navController: NavController, movieID: String?){
     }
 }
 @Composable
-fun MainContentDetail(movie: Movie, navController: NavController, content: @Composable () -> Unit) {
+fun MainContentDetail(movie: Movie, navController: NavController, viewModel: FavoritesViewModel, content: @Composable () -> Unit) {
 
     Scaffold(
         topBar = {

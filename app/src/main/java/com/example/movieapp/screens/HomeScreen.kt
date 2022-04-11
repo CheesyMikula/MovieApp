@@ -27,17 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.transform.CircleCropTransformation
+import com.example.movieapp.models.FavoritesViewModel
 import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(navController: NavController, viewModel: FavoritesViewModel){
 
-    MainContentHome(navController = navController)
+    MainContentHome(navController = navController, viewModel)
 }
 
 @Composable
-fun MainContentHome(navController: NavController, movies: List<Movie> = getMovies()){
+fun MainContentHome(navController: NavController, viewModel: FavoritesViewModel, movies: List<Movie> = getMovies()){
     var showMenu by remember {
         mutableStateOf(false)
     }
@@ -93,7 +94,7 @@ fun MovieRow(movie: Movie, onItemClick: (String) -> Unit={}) {
                 AsyncImage(model = movie.images[0], contentDescription = "preview", modifier = Modifier.clip(CircleShape), contentScale = ContentScale.Crop)
             }
             Column(modifier = Modifier.padding(5.dp)) {
-                Text(text = movie.title, style = MaterialTheme.typography.h5)
+                Text(text = movie.title, style = MaterialTheme.typography.h6)
                 Text(text = "Director: ${movie.director}", style = MaterialTheme.typography.subtitle1)
                 Text(text = "Released: ${movie.year}", style = MaterialTheme.typography.subtitle1)
                 AnimatedVisibility(visible = arrowIcon,
@@ -122,7 +123,17 @@ fun MovieRow(movie: Movie, onItemClick: (String) -> Unit={}) {
                 }
 
             }
-
+            Row(Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End) {
+                IconButton(onClick = {
+                    // TODO:
+                }) {
+                    Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "favorite")
+                }
+            }/*
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "favorite")
+            }*/
         }
 
     }
