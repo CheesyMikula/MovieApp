@@ -2,22 +2,17 @@ package com.example.movieapp.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -29,9 +24,24 @@ import com.example.movieapp.models.getMovies
 fun DetailScreen(navController: NavController, movieID: String?, viewModel: FavoritesViewModel){
 
     val movie = getMovies().first { it.id == movieID }
-    MainContentDetail(movie = movie, navController = navController, viewModel = viewModel){
+    MainContentDetail(movie = movie, navController = navController){
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            MovieRow(movie = movie)
+
+            var favoriteState by remember {
+                mutableStateOf(viewModel.checkIfFavorite(movie))
+            }
+            MovieRow(movie = movie, content = {
+                FavoriteIcon(movie, favoriteState = favoriteState, onFavoriteClick = { favMovie ->
+                    if(viewModel.checkIfFavorite(favMovie)){
+                        viewModel.removeMovie(favMovie)
+                        favoriteState = false
+                    }
+                    else{
+                        viewModel.addMovie(favMovie)
+                        favoriteState = true
+                    }
+                })
+            })
 
             Spacer(modifier = Modifier.height(8.dp))
             
@@ -53,7 +63,7 @@ fun DetailScreen(navController: NavController, movieID: String?, viewModel: Favo
     }
 }
 @Composable
-fun MainContentDetail(movie: Movie, navController: NavController, viewModel: FavoritesViewModel, content: @Composable () -> Unit) {
+fun MainContentDetail(movie: Movie, navController: NavController, content: @Composable () -> Unit) {
 
     Scaffold(
         topBar = {

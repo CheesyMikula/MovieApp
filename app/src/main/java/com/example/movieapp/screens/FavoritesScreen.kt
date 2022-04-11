@@ -16,29 +16,24 @@ import androidx.compose.ui.Modifier
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import com.example.movieapp.models.FavoritesViewModel
-import com.example.movieapp.models.Movie
 import com.example.movieapp.models.getMovies
 
 
 @Composable
 fun FavoritesScreen(navController: NavController, viewModel: FavoritesViewModel){
 
-    val favoritesList = listOf(getMovies()[2], getMovies()[4], getMovies()[5])
-
-    MainContentFavorites(navController = navController, viewModel = viewModel){
+    MainContentFavorites(navController = navController){
         LazyColumn{
-            items(favoritesList){ movie ->
+            items(viewModel.getAllMovies()){ movie ->
                 MovieRow(movie = movie)
             }
         }
-
     }
 }
 
 @Composable
-fun MainContentFavorites(navController: NavController, viewModel: FavoritesViewModel, content: @Composable () -> Unit) {
+fun MainContentFavorites(navController: NavController, content: @Composable () -> Unit) {
 
     Scaffold(
         topBar = {
